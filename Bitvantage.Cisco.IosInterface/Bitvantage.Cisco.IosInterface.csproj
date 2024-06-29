@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<AssemblyName>Bitvantage.$(MSBuildProjectName)</AssemblyName>
+		<AssemblyName>$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Bitvantage.Cisco</RootNamespace>
 		<Title>Bitvantage.Cisco.IosInterface</Title>
 		<PackageProjectUrl>https://github.com/Bitvantage/Cisco.IosInterface</PackageProjectUrl>
@@ -16,8 +16,17 @@
 		<AssemblyVersion>1.0.0</AssemblyVersion>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
-		<Description>Parse Cisco IOS interface names, such as GigabitEthernet0/0, Gi1/0/1, HundredGigE10/0/1.37, Vlan33, etc.</Description>
+		<Description>Parse Cisco IOS interface names, such as GigabitEthernet0/0, Gi1/0/1, HundredGigE10/0/1.37, Vlan33, etc</Description>
+
+		<Copyright>Copyright © Michael Crino 2024</Copyright>
+		<RepositoryUrl>https://github.com/Bitvantage/Cisco.IosInterface.git</RepositoryUrl>
 
 	</PropertyGroup>
+
+
+	<ItemGroup>
+		<None Include="../README.md" Pack="true" PackagePath="" />
+		<None Include="../icon.png" Pack="true" PackagePath="" />
+	</ItemGroup>
 
 </Project>
