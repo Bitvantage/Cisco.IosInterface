@@ -26,16 +26,39 @@ namespace Test
         public void Parse01()
         {
             var success = IosInterface.TryParse("Fa0/0/1.123", out var result);
+
             Assert.That(success, Is.True);
 
+            Assert.IsNull(result.Channel);
+            Assert.IsNull(result.Chassis);
+            Assert.IsTrue(result.IsPhysical);
+            Assert.That(result.Module, Is.EqualTo(0));
+            Assert.That(result.Name, Is.EqualTo("FastEthernet"));
+            Assert.That(result.Port, Is.EqualTo(1));
+            Assert.That(result.Slot, Is.EqualTo(0));
+            Assert.That(result.SubInterface, Is.EqualTo(123));
+            Assert.That(result.Type, Is.EqualTo(InterfaceType.FastEthernet));
+
             Assert.That(result.ToString(), Is.EqualTo("FastEthernet0/0/1.123"));
+
         }
 
         [Test]
         public void Parse02()
         {
             var success = IosInterface.TryParse("mgmt0", out var result);
+
             Assert.That(success, Is.True);
+
+            Assert.IsNull(result.Channel);
+            Assert.IsNull(result.Chassis);
+            Assert.IsTrue(result.IsPhysical);
+            Assert.IsNull(result.Module);
+            Assert.That(result.Name, Is.EqualTo("mgmt"));
+            Assert.That(result.Port, Is.EqualTo(0));
+            Assert.IsNull(result.Slot);
+            Assert.IsNull(result.SubInterface);
+            Assert.That(result.Type, Is.EqualTo(InterfaceType.Management));
 
             Assert.That(result.ToString(), Is.EqualTo("mgmt0"));
         }
@@ -46,10 +69,36 @@ namespace Test
             var success = IosInterface.TryParse("Serial0/1:22", out var result);
             Assert.That(success, Is.True);
 
-            Assert.That(result.ToString(), Is.EqualTo("Serial0/1:22"));
-            Assert.That(result.Type, Is.EqualTo(InterfaceType.Serial));
-            Assert.That(result.Slot, Is.EqualTo(0));
+            Assert.That(result.Channel, Is.EqualTo(22));
+            Assert.IsNull(result.Chassis);
+            Assert.IsTrue(result.IsPhysical);
+            Assert.IsNull(result.Module);
+            Assert.That(result.Name, Is.EqualTo("Serial"));
             Assert.That(result.Port, Is.EqualTo(1));
+            Assert.That(result.Slot, Is.EqualTo(0));
+            Assert.IsNull(result.SubInterface);
+            Assert.That(result.Type, Is.EqualTo(InterfaceType.Serial));
+
+            Assert.That(result.ToString(), Is.EqualTo("Serial0/1:22"));
+        }
+
+        [Test]
+        public void Parse04()
+        {
+            var success = IosInterface.TryParse("interface TenGigabitEthernet1/2", out var result);
+            Assert.That(success, Is.True);
+
+            Assert.IsNull(result.Channel);
+            Assert.IsNull(result.Chassis);
+            Assert.IsTrue(result.IsPhysical);
+            Assert.IsNull(result.Module);
+            Assert.That(result.Name, Is.EqualTo("TenGigabitEthernet"));
+            Assert.That(result.Port, Is.EqualTo(2));
+            Assert.That(result.Slot, Is.EqualTo(1));
+            Assert.IsNull(result.SubInterface);
+            Assert.That(result.Type, Is.EqualTo(InterfaceType.TenGigabitEthernet));
+
+            Assert.That(result.ToString(), Is.EqualTo("TenGigabitEthernet1/2"));
         }
 
         [Test]

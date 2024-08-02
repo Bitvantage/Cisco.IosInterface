@@ -130,6 +130,7 @@ public record IosInterface : IComparable<IosInterface>
 
         InterfaceRegex = new Regex($"""
             ^
+                (interface\ )?
             	(?<type>({interfaceNamePattern}))[ ]?
             	(
             		(
