@@ -55,12 +55,19 @@ public enum InterfaceType
 
 public record IosInterface : IComparable<IosInterface>
 {
+    public enum FormatType
+    {
+        Default,
+        Long,
+        Short,
+    }
+
     private static readonly ReadOnlyDictionary<InterfaceType, string> InterfaceNameLookup;
     private static readonly ReadOnlyDictionary<InterfaceType, bool> InterfacePhysicalLookup;
     private static readonly Regex InterfaceRegex;
     private static readonly ReadOnlyDictionary<string, InterfaceType> InterfaceTypeLookup;
+    private static readonly ReadOnlyDictionary<InterfaceType, string> InterfaceAbbreviations;
     public int? Channel { get; init; }
-
     public int? Chassis { get; init; }
     public bool IsPhysical => InterfacePhysicalLookup[Type];
     public int? Module { get; init; }
@@ -83,7 +90,7 @@ public record IosInterface : IComparable<IosInterface>
             new(InterfaceType.GigabitEthernet, "GigabitEthernet", new List<string> { "Gi" }, true),
             new(InterfaceType.HundredGigabitEthernet, "HundredGigE", new List<string> { "Hu" }, true),
             new(InterfaceType.Loopback, "Loopback", new List<string> { "Lo" }, false),
-            new(InterfaceType.Management, "mgmt", new List<string>(), true),
+            new(InterfaceType.Management, "mgmt", new List<string>() {"mgmt"}, true),
             new(InterfaceType.PortChannel, "Port-channel", new List<string> { "Po" }, false),
             new(InterfaceType.Serial, "Serial", new List<string> { "Se" }, true),
             new(InterfaceType.TenGigabitEthernet, "TenGigabitEthernet", new List<string> { "Te" }, true),
@@ -106,8 +113,13 @@ public record IosInterface : IComparable<IosInterface>
             interfaceTypeLookup.Add(interfaceDefinition.Name, interfaceDefinition.Type);
 
             foreach (var name in interfaceDefinition.Abbreviations)
-                interfaceTypeLookup.Add(name, interfaceDefinition.Type);
+                interfaceTypeLookup.TryAdd(name, interfaceDefinition.Type);
         }
+
+        InterfaceAbbreviations = interfaceDefinitions
+            .Select(item => new { Type = item.Type, Abbreviation = item.Abbreviations.First() })
+            .ToDictionary(item => item.Type, item => item.Abbreviation)
+            .AsReadOnly();
 
         InterfaceTypeLookup = interfaceTypeLookup.AsReadOnly();
         InterfaceNameLookup = interfaceNameLookup.AsReadOnly();
@@ -229,6 +241,11 @@ public record IosInterface : IComparable<IosInterface>
 
     public override string ToString()
     {
+        return ToString(FormatType.Long);
+    }
+
+    public string ToString(FormatType format)
+    {
         var sb = new StringBuilder();
 
         if (Chassis != null)
@@ -275,7 +292,20 @@ public record IosInterface : IComparable<IosInterface>
             sb.Append(Channel);
         }
 
-        sb.Insert(0, Name);
+        switch (format)
+        {
+            case FormatType.Default:
+            case FormatType.Long:
+                sb.Insert(0, InterfaceNameLookup[Type]);
+                break;
+
+            case FormatType.Short:
+                sb.Insert(0, InterfaceAbbreviations[Type]);
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(format), format, null);
+        }
 
         return sb.ToString();
     }
@@ -321,6 +351,6 @@ public record IosInterface : IComparable<IosInterface>
         result = new IosInterface(type, chassis, module, slot, port, subInterface, channel);
         return true;
     }
-
+    
     private record InterfaceDefinition(InterfaceType Type, string Name, List<string> Abbreviations, bool IsPhysical);
 }

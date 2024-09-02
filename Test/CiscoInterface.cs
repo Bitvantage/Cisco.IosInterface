@@ -128,5 +128,21 @@ namespace Test
 
             Assert.That(orderedByKey, Is.EqualTo(orderedByValue));
         }
+
+        [Test]
+        public void ToString01()
+        {
+            var @interface = new IosInterface(InterfaceType.GigabitEthernet, 0, 0, 0,null);
+
+            Assert.That(@interface.ToString(), Is.EqualTo("GigabitEthernet0/0/0"));
+        }
+
+        [Test]
+        public void ToString02()
+        {
+            var @interface = new IosInterface(InterfaceType.GigabitEthernet, 0, 0, 0, null);
+
+            Assert.That(@interface.ToString(IosInterface.FormatType.Short), Is.EqualTo("Gi0/0/0"));
+        }
     }
 }
