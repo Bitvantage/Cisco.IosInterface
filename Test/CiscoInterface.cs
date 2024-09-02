@@ -23,6 +23,38 @@ namespace Test
     internal class CiscoInterface
     {
         [Test]
+        public void Constructor01()
+        {
+            var @interface = new IosInterface(InterfaceType.Vlan, 10);
+
+            Assert.That(@interface.ToString(), Is.EqualTo("Vlan10"));
+        }
+
+        [Test]
+        public void Constructor02()
+        {
+            var @interface = new IosInterface(InterfaceType.GigabitEthernet, 1,0,1);
+
+            Assert.That(@interface.ToString(), Is.EqualTo("GigabitEthernet1/0/1"));
+        }
+
+        [Test]
+        public void Constructor03()
+        {
+            var @interface = new IosInterface(InterfaceType.GigabitEthernet, 1, 0, 1, 2000);
+
+            Assert.That(@interface.ToString(), Is.EqualTo("GigabitEthernet1/0/1.2000"));
+        }
+
+        [Test]
+        public void Constructor04()
+        {
+            var @interface = new IosInterface(InterfaceType.Serial, 1, 0, 1, null, 20);
+
+            Assert.That(@interface.ToString(), Is.EqualTo("Serial1/0/1.20"));
+        }
+
+        [Test]
         public void Parse01()
         {
             var success = IosInterface.TryParse("Fa0/0/1.123", out var result);

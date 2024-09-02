@@ -158,6 +158,29 @@ public record IosInterface : IComparable<IosInterface>
             RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
     }
 
+    public IosInterface(InterfaceType type, int port)
+    {
+        Type = type;
+        Port = port;
+    }
+
+    public IosInterface(InterfaceType type, int? module, int? slot, int? port)
+    {
+        Type = type;
+        Module = module;
+        Slot = slot;
+        Port = port;
+    }
+
+    public IosInterface(InterfaceType type, int? module, int? slot, int? port, int? subInterface)
+    {
+        Type = type;
+        Module = module;
+        Slot = slot;
+        Port = port;
+        SubInterface = subInterface;
+    }
+
     public IosInterface(InterfaceType type, int? chassis, int? module, int? slot, int? port, int? subInterface = null, int? channel = null)
     {
         Type = type;
@@ -167,29 +190,6 @@ public record IosInterface : IComparable<IosInterface>
         Port = port;
         SubInterface = subInterface;
         Channel = channel;
-    }
-
-    public IosInterface(InterfaceType type, int? module, int? slot, int? port, int? subInterface = null)
-    {
-        Type = type;
-        Module = module;
-        Slot = slot;
-        Port = port;
-        SubInterface = subInterface;
-    }
-
-    public IosInterface(InterfaceType type, int port)
-    {
-        Type = type;
-        Port = port;
-    }
-
-    public IosInterface(InterfaceType type, int? slot, int? port, int? subInterface = null)
-    {
-        Type = type;
-        Slot = slot;
-        Port = port;
-        SubInterface = subInterface;
     }
 
     public int CompareTo(IosInterface? other)
